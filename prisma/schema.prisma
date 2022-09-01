@@ -18,7 +18,8 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 
-  url Url[]
+  url          Url[]
+  blackListUrl BlackListUrl[]
 }
 
 model Url {
@@ -35,6 +36,17 @@ model Url {
   userId String?
 
   visits Visit[]
+}
+
+model BlackListUrl {
+  id     String  @id @default(cuid())
+  url    String
+  reason String? @db.Text
+
+  causerId String?
+  causer   User?   @relation(fields: [causerId], references: [id])
+
+  createdAt DateTime @default(now())
 }
 
 model Visit {
