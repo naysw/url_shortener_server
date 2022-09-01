@@ -1,6 +1,6 @@
 import { Injectable, InternalServerErrorException } from "@nestjs/common";
 import cuid from "cuid";
-import { PrismaService } from "../common/prisma.service";
+import { PrismaService } from "../../common/prisma.service";
 
 @Injectable()
 export class UrlService {

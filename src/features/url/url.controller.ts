@@ -1,6 +1,6 @@
 import { Body, Controller, Post } from "@nestjs/common";
+import { JoiValidationPipe } from "src/pipe/joi-validation.pipe";
 import { BlackListUrlService } from "../black-list-url/black-list-url.service";
-import { JoiValidationPipe } from "../pipe/joi-validation.pipe";
 import { UrlShortInput, urlShortInputSchema } from "./dto/url-short.input";
 import { UrlService } from "./url.service";
 
