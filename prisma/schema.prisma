@@ -13,13 +13,14 @@ datasource db {
 model User {
   id        String   @id @default(cuid())
   name      String
-  username  String
+  username  String   @unique
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 
-  url          Url[]
+  urls         Url[]
   blackListUrl BlackListUrl[]
+  roles        UsersOnRoles[]
 }
 
 model Url {
@@ -56,4 +57,42 @@ model Visit {
 
   url   Url    @relation(fields: [urlId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   urlId String
+}
+
+model Role {
+  id   String @id @default(uuid())
+  name String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  permissions RolesOnPermissons[]
+  users       UsersOnRoles[]
+}
+
+model Permission {
+  id   String @id @default(uuid())
+  name String
+
+  createdAt DateTime            @default(now())
+  updatedAt DateTime            @default(now())
+  roles     RolesOnPermissons[]
+}
+
+model RolesOnPermissons {
+  role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  roleId       String
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  permissionId String
+
+  @@id([roleId, permissionId])
+}
+
+model UsersOnRoles {
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId String
+  role   Role   @relation(fields: [roleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  roleId String
+
+  @@id([userId, roleId])
 }
