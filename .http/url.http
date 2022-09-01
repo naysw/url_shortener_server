@@ -1,0 +1,12 @@
+@HOST_NAME = localhost
+@PORT = 4000
+@HOST = {{HOST_NAME}}:{{PORT}}
+@CONTENT_TYPE = application/json
+@MODEL=url
+
+POSt http://{{HOST}}/{{MODEL}}/short
+Content-Type: {{CONTENT_TYPE}}
+
+{
+    "fullUrl": "https://dd.com"
+}
