@@ -1,9 +1,7 @@
-import {
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-} from "@nestjs/common";
-import cuid from "cuid";
+import { Inject, Injectable, NotFoundException } from "@nestjs/common";
+import { REQUEST } from "@nestjs/core";
+import { Url } from "@prisma/client";
+import { Request } from "express";
 import { PrismaService } from "../../common/prisma.service";
 import { UrlRepository } from "./repositories/url.repository";
 
@@ -12,6 +10,7 @@ export class UrlService {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly urlRepository: UrlRepository,
+    @Inject(REQUEST) private readonly req: Request,
   ) {}
 
   getRedirectableUrl(urlString: string) {
@@ -27,7 +26,7 @@ export class UrlService {
         `Url with ${JSON.stringify(shoortCode)} not found`,
       );
 
-    return url;
+    return this.urlResource(url);
   }
 
   getUrlString(originalUrl: string): string {
@@ -44,15 +43,17 @@ export class UrlService {
   }
 
   async create(originalUrl: string, userId?: string) {
-    try {
-      return await this.prismaService.url.create({
-        data: {
-          originalUrl,
-          shortCode: cuid.slug(),
-        },
-      });
-    } catch (error) {
-      throw new InternalServerErrorException("Error Occoured on : create Url");
-    }
+    const url = await this.urlRepository.create(originalUrl, userId);
+
+    return this.urlResource(url);
+  }
+
+  private urlResource(url: Url) {
+    return {
+      ...url,
+      link: `${this.req.protocol + "://" + this.req.get("host")}/${
+        url.shortCode
+      }`,
+    };
   }
 }
