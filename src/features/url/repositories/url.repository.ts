@@ -6,11 +6,31 @@ import { PrismaService } from "../../../common/prisma.service";
 export class UrlRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
+  async findMany() {
+    try {
+      return await this.prismaService.url.findMany({});
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
+  }
+
   async findByShortCode(shortCode: string) {
     try {
       return await this.prismaService.url.findUnique({
         where: {
           shortCode,
+        },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException("DB error");
+    }
+  }
+
+  async findById(id: string) {
+    try {
+      return await this.prismaService.url.findUnique({
+        where: {
+          id,
         },
       });
     } catch (error) {
@@ -29,5 +49,15 @@ export class UrlRepository {
     } catch (error) {
       throw new InternalServerErrorException("Error Occoured on : create Url");
     }
+  }
+
+  async deleteById(id: string) {
+    try {
+      return await this.prismaService.url.delete({
+        where: {
+          id,
+        },
+      });
+    } catch (error) {}
   }
 }

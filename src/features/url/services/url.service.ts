@@ -14,6 +14,12 @@ export class UrlService {
     @Inject(REQUEST) private readonly req: Request,
   ) {}
 
+  async findMany() {
+    const urls = await this.urlRepository.findMany();
+
+    return urls.map((url) => this.urlResource(url));
+  }
+
   getRedirectableUrl(urlString: string) {
     // console.log(url.parse())
     return urlString;
@@ -26,6 +32,15 @@ export class UrlService {
       throw new NotFoundException(
         `Url with ${JSON.stringify(shoortCode)} not found`,
       );
+
+    return this.urlResource(url);
+  }
+
+  async findById(id: string) {
+    const url = await this.urlRepository.findById(id);
+
+    if (!url)
+      throw new NotFoundException(`Url with ${JSON.stringify(id)} not found`);
 
     return this.urlResource(url);
   }
@@ -60,5 +75,9 @@ export class UrlService {
         url.shortCode
       }`,
     };
+  }
+
+  async deleteById(id: string) {
+    return await this.urlRepository.deleteById(id);
   }
 }

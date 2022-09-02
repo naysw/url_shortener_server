@@ -1,4 +1,12 @@
-import { Body, Controller, Post, UseGuards } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  UseGuards,
+} from "@nestjs/common";
 import { User } from "@prisma/client";
 import { ResponseResource } from "../../../common/resources/response.resource";
 import { JoiValidationPipe } from "../../../pipe/joi-validation.pipe";
@@ -17,6 +25,13 @@ export class UrlController {
     private readonly blackListUrl: BlackListUrlService,
   ) {}
 
+  @Get()
+  async findManyUrl() {
+    const urls = await this.urlService.findMany();
+
+    return new ResponseResource(urls);
+  }
+
   @Post("/short")
   @UseGuards(JwtAuthGuard)
   async makeShort(
@@ -32,5 +47,16 @@ export class UrlController {
     });
 
     return new ResponseResource(url).setMessage("Url short successfully");
+  }
+
+  @Delete(":id")
+  async deleteUrl(@Param("id") id: string) {
+    await this.urlService.findById(id);
+
+    await this.urlService.deleteById(id);
+
+    return new ResponseResource(null).setMessage(
+      `Url with ${JSON.stringify(id)} deleted successfully`,
+    );
   }
 }
