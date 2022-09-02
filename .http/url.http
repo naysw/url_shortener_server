@@ -8,5 +8,5 @@ POSt http://{{HOST}}/{{MODEL}}/short
 Content-Type: {{CONTENT_TYPE}}
 
 {
-    "fullUrl": "https://facebook.com"
+    "originalUrl": "https://facebook.com"
 }

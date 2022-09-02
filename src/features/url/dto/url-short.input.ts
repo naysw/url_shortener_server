@@ -1,9 +1,9 @@
-import Joi from 'joi';
+import Joi from "joi";
 
 export interface UrlShortInput {
-  fullUrl: string;
+  originalUrl: string;
 }
 
 export const urlShortInputSchema = Joi.object<UrlShortInput>({
-  fullUrl: Joi.string().uri().required().trim(),
+  originalUrl: Joi.string().uri({ allowRelative: true }).required().trim(),
 });

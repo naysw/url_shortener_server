@@ -1,5 +1,6 @@
 import { Body, Controller, Post } from "@nestjs/common";
-import { JoiValidationPipe } from "src/pipe/joi-validation.pipe";
+import { ResponseResource } from "../../common/resources/response.resource";
+import { JoiValidationPipe } from "../../pipe/joi-validation.pipe";
 import { BlackListUrlService } from "../black-list-url/black-list-url.service";
 import { UrlShortInput, urlShortInputSchema } from "./dto/url-short.input";
 import { UrlService } from "./url.service";
@@ -16,10 +17,14 @@ export class UrlController {
   @Post("/short")
   async makeShort(
     @Body(new JoiValidationPipe(urlShortInputSchema))
-    { fullUrl }: UrlShortInput,
+    { originalUrl }: UrlShortInput,
   ) {
-    await this.blackListUrl.checkBlackListUrl(fullUrl);
+    await this.blackListUrl.checkBlackListUrl(originalUrl);
 
-    return await this.urlService.create(fullUrl);
+    // console.log(new URL(originalUrl));
+
+    const url = await this.urlService.create(originalUrl);
+
+    return new ResponseResource(url).setMessage("Url short successfully");
   }
 }

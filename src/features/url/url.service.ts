@@ -6,11 +6,11 @@ import { PrismaService } from "../../common/prisma.service";
 export class UrlService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async create(fullUrl: string, userId?: string) {
+  async create(originalUrl: string, userId?: string) {
     try {
       return await this.prismaService.url.create({
         data: {
-          fullUrl,
+          originalUrl,
           shortCode: cuid.slug(),
         },
       });

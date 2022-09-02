@@ -26,8 +26,8 @@ model User {
 model Url {
   id String @id @default(cuid())
 
-  shortCode String @unique
-  fullUrl   String
+  shortCode   String @unique
+  originalUrl String
 
   expiredAt DateTime?
   createdAt DateTime  @default(now())
