@@ -3,7 +3,7 @@ import { ResponseResource } from "../../../common/resources/response.resource";
 import { JwtAuthGuard } from "../../../features/auth/guards/jwt-auth.guard";
 
 @Controller({
-  path: "/api/users",
+  path: "users",
 })
 export class UserController {
   /**

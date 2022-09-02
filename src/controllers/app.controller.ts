@@ -15,11 +15,6 @@ export class AppController {
     private readonly eventEmitter: EventEmitter2,
   ) {}
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
-  }
-
   @Get(":shortCode")
   async getLink(
     @Param("shortCode") shortCode: string,

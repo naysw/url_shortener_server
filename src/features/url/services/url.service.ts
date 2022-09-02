@@ -3,6 +3,7 @@ import { REQUEST } from "@nestjs/core";
 import { Url } from "@prisma/client";
 import { Request } from "express";
 import { PrismaService } from "../../../common/prisma.service";
+import { FindManyUrlInput } from "../dto/find-many-url.input";
 import { UrlShortInput } from "../dto/url-short.input";
 import { UrlRepository } from "../repositories/url.repository";
 
@@ -14,8 +15,8 @@ export class UrlService {
     @Inject(REQUEST) private readonly req: Request,
   ) {}
 
-  async findMany() {
-    const urls = await this.urlRepository.findMany();
+  async findMany({ take, skip }: FindManyUrlInput) {
+    const urls = await this.urlRepository.findMany({ take, skip });
 
     return urls.map((url) => this.urlResource(url));
   }

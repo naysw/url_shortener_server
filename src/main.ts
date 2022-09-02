@@ -8,6 +8,7 @@ import cors from "./config/cors";
 
   app.enableCors(cors);
   // app.setGlobalPrefix("api");
+
   const PORT = process.env.PORT || 4000;
 
   await app.listen(PORT, async () => {

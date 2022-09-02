@@ -9,7 +9,15 @@ import { AppService } from "./services/app.service";
 import { VisitService } from "./services/visit.service";
 
 @Module({
-  imports: [UrlModule, CommonModule, EventEmitterModule.forRoot(), AuthModule],
+  imports: [
+    // ServeStaticModule.forRoot({
+    //   exclude: ["/api*"],
+    // }),
+    UrlModule,
+    CommonModule,
+    EventEmitterModule.forRoot(),
+    AuthModule,
+  ],
   controllers: [AppController],
   providers: [AppService, VisitService, VisitRepository],
 })

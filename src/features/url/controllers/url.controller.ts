@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   Post,
+  Query,
   UseGuards,
 } from "@nestjs/common";
 import { User } from "@prisma/client";
@@ -13,6 +14,10 @@ import { JoiValidationPipe } from "../../../pipe/joi-validation.pipe";
 import { AuthUser } from "../../auth/decorators/auth-user.decorator";
 import { JwtAuthGuard } from "../../auth/guards/jwt-auth.guard";
 import { BlackListUrlService } from "../../black-list-url/black-list-url.service";
+import {
+  FindManyUrlInput,
+  findManyUrlInputSchema,
+} from "../dto/find-many-url.input";
 import { UrlShortInput, urlShortInputSchema } from "../dto/url-short.input";
 import { UrlService } from "../services/url.service";
 
@@ -26,8 +31,11 @@ export class UrlController {
   ) {}
 
   @Get()
-  async findManyUrl() {
-    const urls = await this.urlService.findMany();
+  async findManyUrl(
+    @Query(new JoiValidationPipe(findManyUrlInputSchema))
+    { take, skip }: FindManyUrlInput,
+  ) {
+    const urls = await this.urlService.findMany({ take, skip });
 
     return new ResponseResource(urls);
   }
