@@ -9,8 +9,8 @@ import {
 import { JwtService } from "@nestjs/jwt";
 import bcrypt from "bcrypt";
 import { Request, Response } from "express";
-import { ResponseResource } from "src/common/resources/response.resource";
-import { JoiValidationPipe } from "src/pipe/joi-validation.pipe";
+import { ResponseResource } from "../../../common/resources/response.resource";
+import { JoiValidationPipe } from "../../../pipe/joi-validation.pipe";
 import { UserService } from "../../users/services/user.service";
 import { LoginInput, loginInputSchema } from "../input/login.input";
 

@@ -1,6 +1,6 @@
 import { Controller, Get, Req, UseGuards } from "@nestjs/common";
-import { ResponseResource } from "src/common/resources/response.resource";
-import { JwtAuthGuard } from "src/features/auth/guards/jwt-auth.guard";
+import { ResponseResource } from "../../../common/resources/response.resource";
+import { JwtAuthGuard } from "../../../features/auth/guards/jwt-auth.guard";
 
 @Controller({
   path: "/api/users",

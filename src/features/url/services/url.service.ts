@@ -2,8 +2,9 @@ import { Inject, Injectable, NotFoundException } from "@nestjs/common";
 import { REQUEST } from "@nestjs/core";
 import { Url } from "@prisma/client";
 import { Request } from "express";
-import { PrismaService } from "../../common/prisma.service";
-import { UrlRepository } from "./repositories/url.repository";
+import { PrismaService } from "../../../common/prisma.service";
+import { UrlShortInput } from "../dto/url-short.input";
+import { UrlRepository } from "../repositories/url.repository";
 
 @Injectable()
 export class UrlService {
@@ -32,17 +33,21 @@ export class UrlService {
   getUrlString(originalUrl: string): string {
     const r = new RegExp("^(?:[a-z+]+:)?//", "i");
 
-    if (
-      originalUrl.indexOf("http://") === 0 ||
-      originalUrl.indexOf("https://") === 0
-    ) {
-      return `http://${originalUrl}`;
-    }
+    // if (
+    //   originalUrl.indexOf("http://") === 0 ||
+    //   originalUrl.indexOf("https://") === 0
+    // ) {
+    //   return `http://${originalUrl}`;
+    // }
 
     return originalUrl;
   }
 
-  async create(originalUrl: string, userId?: string) {
+  async create({
+    originalUrl,
+    expiredAt,
+    userId,
+  }: UrlShortInput & { userId?: string }) {
     const url = await this.urlRepository.create(originalUrl, userId);
 
     return this.urlResource(url);
