@@ -30,4 +30,29 @@ export class UserRepository {
       );
     }
   }
+
+  /**
+   * find user by unique
+   *
+   * @param id string
+   * @returns
+   */
+  async findById(id: string) {
+    try {
+      return await this.prismaService.user.findUnique({
+        where: {
+          id,
+        },
+        include: {
+          roles: {
+            include: { role: true },
+          },
+        },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(
+        `user findUnique error: ${IS_DEV && error}`,
+      );
+    }
+  }
 }

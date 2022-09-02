@@ -35,7 +35,7 @@ export class LoginController {
     { username, password }: LoginInput,
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
-  ): Promise<ResponseResource<{ token: string }>> {
+  ): Promise<ResponseResource<{ accessToken: string }>> {
     const user = await this.userService.findByUsername(username);
 
     if (!user)
@@ -47,15 +47,15 @@ export class LoginController {
       throw new UnauthorizedException("Username or password is incorrect");
     }
 
-    const token = await this.jwtService.signAsync({ sub: user.id });
+    const accessToken = await this.jwtService.signAsync({ sub: user.id });
 
-    res.cookie("authorization", `Bearer ${token}`, {
+    res.cookie("authorization", `Bearer ${accessToken}`, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       maxAge: 1000 * 60 * 60 * 24 * 7,
     });
 
-    return new ResponseResource({ token });
+    return new ResponseResource({ accessToken });
   }
 }
