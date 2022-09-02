@@ -16,7 +16,6 @@ import { LoginInput, loginInputSchema } from "../input/login.input";
 
 @Controller({
   path: "/api/auth",
-  version: "1",
 })
 export class LoginController {
   constructor(
