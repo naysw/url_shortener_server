@@ -1,5 +1,5 @@
 {
-  "name": "yomafleet_url_shortener",
+  "name": "@nsw/url_shortener",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -50,6 +50,7 @@
     "eslint": "^8.0.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
+    "husky": "^8.0.1",
     "jest": "28.1.2",
     "prettier": "^2.3.2",
     "prisma": "^4.3.0",
@@ -80,5 +81,15 @@
   },
   "prisma": {
     "seed": "ts-node prisma/seeds/index.ts"
+  },
+  "lint-staged": {
+    "*.{js,ts}": [
+      "prettier --write",
+      "eslint --fix"
+    ]
+  },
+  "engines": {
+    "npm": ">=8.0.0",
+    "node": ">=16.0.0"
   }
 }
