@@ -7,7 +7,7 @@ import cors from "./config/cors";
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   app.enableCors(cors);
-  app.setGlobalPrefix("api");
+  // app.setGlobalPrefix("api");
   const PORT = process.env.PORT || 4000;
 
   await app.listen(PORT, async () => {

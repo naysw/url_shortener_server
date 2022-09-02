@@ -6,7 +6,7 @@ import { UrlShortInput, urlShortInputSchema } from "./dto/url-short.input";
 import { UrlService } from "./url.service";
 
 @Controller({
-  path: "url",
+  path: "api/url",
 })
 export class UrlController {
   constructor(
@@ -21,9 +21,9 @@ export class UrlController {
   ) {
     await this.blackListUrl.checkBlackListUrl(originalUrl);
 
-    // console.log(new URL(originalUrl));
-
-    const url = await this.urlService.create(originalUrl);
+    const url = await this.urlService.create(
+      this.urlService.getUrlString(originalUrl),
+    );
 
     return new ResponseResource(url).setMessage("Url short successfully");
   }
