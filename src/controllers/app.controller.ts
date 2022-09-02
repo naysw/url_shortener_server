@@ -1,10 +1,10 @@
 import { Controller, Get, HttpStatus, Param, Req, Res } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { Request, Response } from "express";
-import { AppService } from "./app.service";
-import { UrlVisitedEvent } from "./features/url/events/url-visited.event";
-import { UrlService } from "./features/url/url.service";
-import { VisitService } from "./services/visit.service";
+import { UrlVisitedEvent } from "../features/url/events/url-visited.event";
+import { UrlService } from "../features/url/url.service";
+import { AppService } from "../services/app.service";
+import { VisitService } from "../services/visit.service";
 
 @Controller()
 export class AppController {

@@ -15,6 +15,7 @@ export class UrlService {
   ) {}
 
   getRedirectableUrl(urlString: string) {
+    // console.log(url.parse())
     return urlString;
   }
 
