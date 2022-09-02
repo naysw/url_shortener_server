@@ -3,7 +3,7 @@ import { EventEmitterModule } from "@nestjs/event-emitter";
 import { CommonModule } from "./common/common.module";
 import { AppController } from "./controllers/app.controller";
 import { AuthModule } from "./features/auth/auth.module";
-import { UrlModule } from "./features/url/url.module";
+import { LinkModule } from "./features/link/link.module";
 import { VisitRepository } from "./repositories/visit.repository";
 import { AppService } from "./services/app.service";
 import { VisitService } from "./services/visit.service";
@@ -13,7 +13,7 @@ import { VisitService } from "./services/visit.service";
     // ServeStaticModule.forRoot({
     //   exclude: ["/api*"],
     // }),
-    UrlModule,
+    LinkModule,
     CommonModule,
     EventEmitterModule.forRoot(),
     AuthModule,

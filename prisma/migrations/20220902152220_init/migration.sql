@@ -12,16 +12,16 @@ CREATE TABLE `User` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `Url` (
+CREATE TABLE `Link` (
     `id` VARCHAR(191) NOT NULL,
     `shortCode` VARCHAR(191) NOT NULL,
-    `originalUrl` VARCHAR(191) NOT NULL,
+    `fullUrl` VARCHAR(191) NOT NULL,
     `expiredAt` DATETIME(3) NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `userId` VARCHAR(191) NULL,
 
-    UNIQUE INDEX `Url_shortCode_key`(`shortCode`),
+    UNIQUE INDEX `Link_shortCode_key`(`shortCode`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -84,13 +84,13 @@ CREATE TABLE `UsersOnRoles` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- AddForeignKey
-ALTER TABLE `Url` ADD CONSTRAINT `Url_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `Link` ADD CONSTRAINT `Link_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `BlackListUrl` ADD CONSTRAINT `BlackListUrl_causerId_fkey` FOREIGN KEY (`causerId`) REFERENCES `User`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Visit` ADD CONSTRAINT `Visit_urlId_fkey` FOREIGN KEY (`urlId`) REFERENCES `Url`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `Visit` ADD CONSTRAINT `Visit_urlId_fkey` FOREIGN KEY (`urlId`) REFERENCES `Link`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `RolesOnPermissons` ADD CONSTRAINT `RolesOnPermissons_roleId_fkey` FOREIGN KEY (`roleId`) REFERENCES `Role`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

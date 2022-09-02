@@ -1,21 +1,21 @@
 import { Inject, Injectable, NotFoundException } from "@nestjs/common";
 import { REQUEST } from "@nestjs/core";
-import { Url } from "@prisma/client";
+import { Link } from "@prisma/client";
 import { Request } from "express";
 import { PrismaService } from "../../../common/prisma.service";
-import { FindManyUrlInput } from "../dto/find-many-url.input";
+import { FindManyLinkInput } from "../dto/find-many-link.input";
 import { UrlShortInput } from "../dto/url-short.input";
 import { UrlRepository } from "../repositories/url.repository";
 
 @Injectable()
-export class UrlService {
+export class LinkService {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly urlRepository: UrlRepository,
     @Inject(REQUEST) private readonly req: Request,
   ) {}
 
-  async findMany({ take, skip }: FindManyUrlInput) {
+  async findMany({ take, skip }: FindManyLinkInput) {
     const urls = await this.urlRepository.findMany({ take, skip });
 
     return urls.map((url) => this.urlResource(url));
@@ -46,30 +46,30 @@ export class UrlService {
     return this.urlResource(url);
   }
 
-  getUrlString(originalUrl: string): string {
+  getUrlString(fullUrl: string): string {
     const r = new RegExp("^(?:[a-z+]+:)?//", "i");
 
     // if (
-    //   originalUrl.indexOf("http://") === 0 ||
-    //   originalUrl.indexOf("https://") === 0
+    //   fullUrl.indexOf("http://") === 0 ||
+    //   fullUrl.indexOf("https://") === 0
     // ) {
-    //   return `http://${originalUrl}`;
+    //   return `http://${fullUrl}`;
     // }
 
-    return originalUrl;
+    return fullUrl;
   }
 
   async create({
-    originalUrl,
+    fullUrl,
     expiredAt,
     userId,
   }: UrlShortInput & { userId?: string }) {
-    const url = await this.urlRepository.create(originalUrl, userId);
+    const url = await this.urlRepository.create(fullUrl, userId);
 
     return this.urlResource(url);
   }
 
-  private urlResource(url: Url) {
+  private urlResource(url: Link) {
     return {
       ...url,
       link: `${this.req.protocol + "://" + this.req.get("host")}/${

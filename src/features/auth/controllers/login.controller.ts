@@ -15,7 +15,7 @@ import { UserService } from "../../users/services/user.service";
 import { LoginInput, loginInputSchema } from "../input/login.input";
 
 @Controller({
-  path: "auth",
+  path: "api/auth",
 })
 export class LoginController {
   constructor(

@@ -2,21 +2,21 @@ import { Module } from "@nestjs/common";
 import { VisitRepository } from "../../repositories/visit.repository";
 import { VisitService } from "../../services/visit.service";
 import { BlackListUrlModule } from "../black-list-url/black-list-url.module";
-import { UrlController } from "./controllers/url.controller";
+import { LinkController } from "./controllers/link.controller";
 import { UrlListener } from "./listeners/url.listener";
 import { UrlRepository } from "./repositories/url.repository";
-import { UrlService } from "./services/url.service";
+import { LinkService } from "./services/link.service";
 
 @Module({
   imports: [BlackListUrlModule],
-  controllers: [UrlController],
+  controllers: [LinkController],
   providers: [
-    UrlService,
+    LinkService,
     UrlRepository,
     UrlListener,
     VisitService,
     VisitRepository,
   ],
-  exports: [UrlService],
+  exports: [LinkService],
 })
-export class UrlModule {}
+export class LinkModule {}

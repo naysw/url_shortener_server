@@ -27,7 +27,7 @@ model Link {
   id String @id @default(cuid())
 
   shortCode String @unique
-  longUrl   String
+  fullUrl   String
 
   expiredAt DateTime?
   createdAt DateTime  @default(now())

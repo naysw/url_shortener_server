@@ -1,8 +1,8 @@
 import { Controller, Get, HttpStatus, Param, Req, Res } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { Request, Response } from "express";
-import { UrlVisitedEvent } from "../features/url/events/url-visited.event";
-import { UrlService } from "../features/url/services/url.service";
+import { UrlVisitedEvent } from "../features/link/events/url-visited.event";
+import { LinkService } from "../features/link/services/link.service";
 import { AppService } from "../services/app.service";
 import { VisitService } from "../services/visit.service";
 
@@ -10,7 +10,7 @@ import { VisitService } from "../services/visit.service";
 export class AppController {
   constructor(
     private readonly appService: AppService,
-    private readonly urlService: UrlService,
+    private readonly urlService: LinkService,
     private readonly visitService: VisitService,
     private readonly eventEmitter: EventEmitter2,
   ) {}
@@ -42,7 +42,7 @@ export class AppController {
        * to redirect to external url, the url should start with valid
        * protocol, otherwise it will redirect internal server path
        */
-      this.urlService.getRedirectableUrl(url.originalUrl),
+      this.urlService.getRedirectableUrl(url.fullUrl),
     );
   }
 }
