@@ -3,6 +3,7 @@ import cuid from "cuid";
 import { PrismaService } from "../../../common/prisma.service";
 import { DEFAULT_TAKE } from "../../../config/constants";
 import { FindManyLinkInput } from "../dto/find-many-link.input";
+import { UrlShortInput } from "../dto/url-short.input";
 
 @Injectable()
 export class UrlRepository {
@@ -46,12 +47,24 @@ export class UrlRepository {
     }
   }
 
-  async create(fullUrl: string, userId?: string) {
+  async create({
+    fullUrl,
+    expiredAt,
+    userId,
+  }: UrlShortInput & { userId?: string }) {
     try {
       return await this.prismaService.link.create({
         data: {
           fullUrl,
+          expiredAt,
           shortCode: cuid.slug(),
+          user: userId
+            ? {
+                connect: {
+                  id: userId,
+                },
+              }
+            : undefined,
         },
       });
     } catch (error) {

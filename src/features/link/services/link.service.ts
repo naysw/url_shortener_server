@@ -64,7 +64,7 @@ export class LinkService {
     expiredAt,
     userId,
   }: UrlShortInput & { userId?: string }) {
-    const url = await this.urlRepository.create(fullUrl, userId);
+    const url = await this.urlRepository.create({ fullUrl, expiredAt, userId });
 
     return this.urlResource(url);
   }

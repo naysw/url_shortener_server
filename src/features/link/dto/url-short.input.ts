@@ -6,6 +6,6 @@ export interface UrlShortInput {
 }
 
 export const urlShortInputSchema = Joi.object<UrlShortInput>({
-  fullUrl: Joi.string().uri({ allowRelative: true }).required().trim(),
+  fullUrl: Joi.string().uri().required().trim(),
   expiredAt: Joi.string().isoDate().trim(),
 });

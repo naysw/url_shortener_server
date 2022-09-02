@@ -22,7 +22,7 @@ import { UrlShortInput, urlShortInputSchema } from "../dto/url-short.input";
 import { LinkService } from "../services/link.service";
 
 @Controller({
-  path: "api/url",
+  path: "api/links",
 })
 export class LinkController {
   constructor(
@@ -52,6 +52,7 @@ export class LinkController {
     const url = await this.urlService.create({
       fullUrl: this.urlService.getUrlString(fullUrl),
       expiredAt,
+      userId: authUser.id,
     });
 
     return new ResponseResource(url).setMessage("Url short successfully");
