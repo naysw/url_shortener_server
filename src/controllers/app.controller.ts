@@ -1,4 +1,13 @@
-import { Controller, Get, HttpStatus, Param, Req, Res } from "@nestjs/common";
+import {
+  CacheInterceptor,
+  Controller,
+  Get,
+  HttpStatus,
+  Param,
+  Req,
+  Res,
+  UseInterceptors,
+} from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 import { Request, Response } from "express";
 import { UrlVisitedEvent } from "../features/link/events/url-visited.event";
@@ -12,6 +21,7 @@ export class AppController {
   ) {}
 
   @Get(":shortCode")
+  @UseInterceptors(CacheInterceptor)
   async getLink(
     @Param("shortCode") shortCode: string,
     @Req() req: Request,
