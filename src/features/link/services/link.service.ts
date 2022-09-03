@@ -5,13 +5,13 @@ import { Request } from "express";
 import { PrismaService } from "../../../common/prisma.service";
 import { FindManyLinkInput } from "../dto/find-many-link.input";
 import { UrlShortInput } from "../dto/url-short.input";
-import { UrlRepository } from "../repositories/url.repository";
+import { LinkRepository } from "../repositories/link.repository";
 
 @Injectable()
 export class LinkService {
   constructor(
     private readonly prismaService: PrismaService,
-    private readonly urlRepository: UrlRepository,
+    private readonly urlRepository: LinkRepository,
     @Inject(REQUEST) private readonly req: Request,
   ) {}
 

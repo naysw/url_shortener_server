@@ -6,7 +6,7 @@ import { FindManyLinkInput } from "../dto/find-many-link.input";
 import { UrlShortInput } from "../dto/url-short.input";
 
 @Injectable()
-export class UrlRepository {
+export class LinkRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
   async findMany({ take, skip }: FindManyLinkInput) {
@@ -16,6 +16,9 @@ export class UrlRepository {
         skip: Number(skip) || undefined,
         include: {
           visits: true,
+        },
+        orderBy: {
+          createdAt: "desc",
         },
       });
     } catch (error) {
