@@ -33,9 +33,9 @@ export class LinkController {
   @Get()
   async findManyLink(
     @Query(new JoiValidationPipe(findManyLinkInputSchema))
-    { take, skip }: FindManyLinkInput,
+    { take, skip, keyword }: FindManyLinkInput,
   ) {
-    const links = await this.linkService.findMany({ take, skip });
+    const links = await this.linkService.findMany({ take, skip, keyword });
 
     return new ResponseResource(links);
   }

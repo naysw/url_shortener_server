@@ -9,9 +9,18 @@ import { UrlShortInput } from "../dto/url-short.input";
 export class LinkRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async findMany({ take, skip }: FindManyLinkInput) {
+  async findMany({ take, skip, keyword }: FindManyLinkInput) {
     try {
       return await this.prismaService.link.findMany({
+        where: {
+          OR: keyword && [
+            {
+              fullUrl: {
+                contains: String(keyword) || undefined,
+              },
+            },
+          ],
+        },
         take: Number(take) || DEFAULT_TAKE,
         skip: Number(skip) || undefined,
         include: {

@@ -6,4 +6,5 @@ export type FindManyLinkInput = BaseQueryInput;
 export const findManyLinkInputSchema = Joi.object({
   take: Joi.number(),
   skip: Joi.number(),
+  keyword: Joi.string().trim(),
 });
