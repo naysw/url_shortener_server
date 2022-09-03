@@ -1,9 +1,11 @@
-import { Controller, Get, Req, UseGuards } from "@nestjs/common";
+import { Controller, Get, UseGuards } from "@nestjs/common";
+import { User } from "@prisma/client";
 import { ResponseResource } from "../../../common/resources/response.resource";
 import { JwtAuthGuard } from "../../../features/auth/guards/jwt-auth.guard";
+import { AuthUser } from "../../auth/decorators/auth-user.decorator";
 
 @Controller({
-  path: "users",
+  path: "api/users",
 })
 export class UserController {
   /**
@@ -14,15 +16,14 @@ export class UserController {
    */
   @Get("/me")
   @UseGuards(JwtAuthGuard)
-  async findMe(@Req() req: any) {
+  async me(@AuthUser() authUser: User & { roles?: any[] }) {
     return new ResponseResource({
-      id: req.user.id,
-      name: req.user.name,
-      email: req.user.email,
-      username: req.user.username,
-      roles: req.user.roles,
-      createdAt: req.user.createdAt,
-      updatedAt: req.user.updatedAt,
+      id: authUser.id,
+      name: authUser.name,
+      username: authUser.username,
+      roles: authUser.roles,
+      createdAt: authUser.createdAt,
+      updatedAt: authUser.updatedAt,
     });
   }
 }

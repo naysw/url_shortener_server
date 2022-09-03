@@ -1,4 +1,9 @@
-import { Inject, Injectable, NotFoundException } from "@nestjs/common";
+import {
+  GoneException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
 import { REQUEST } from "@nestjs/core";
 import { Link } from "@prisma/client";
 import { Request } from "express";
@@ -26,12 +31,18 @@ export class LinkService {
     return urlString;
   }
 
+  /**
+   * find link by shortCode and return `GoneException, 410` if record not found
+   *
+   * @param shoortCode string
+   * @returns
+   */
   async findByShortCode(shoortCode: string) {
     const url = await this.urlRepository.findByShortCode(shoortCode);
 
     if (!url)
-      throw new NotFoundException(
-        `Url with ${JSON.stringify(shoortCode)} not found`,
+      throw new GoneException(
+        `Url with ${JSON.stringify(shoortCode)} not found or deleted`,
       );
 
     return this.urlResource(url);
