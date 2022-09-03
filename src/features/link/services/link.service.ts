@@ -20,8 +20,13 @@ export class LinkService {
     @Inject(REQUEST) private readonly req: Request,
   ) {}
 
-  async findMany({ take, skip, keyword }: FindManyLinkInput) {
-    const urls = await this.urlRepository.findMany({ take, skip, keyword });
+  async findMany({ take, skip, keyword, orderBy }: FindManyLinkInput) {
+    const urls = await this.urlRepository.findMany({
+      take,
+      skip,
+      keyword,
+      orderBy,
+    });
 
     return urls.map((url) => this.urlResource(url));
   }

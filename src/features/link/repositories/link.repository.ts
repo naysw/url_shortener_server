@@ -2,6 +2,7 @@ import { Injectable, InternalServerErrorException } from "@nestjs/common";
 import cuid from "cuid";
 import { PrismaService } from "../../../common/prisma.service";
 import { DEFAULT_TAKE } from "../../../config/constants";
+import { registerOrderBy } from "../../../utils/queryBuilder";
 import { FindManyLinkInput } from "../dto/find-many-link.input";
 import { UrlShortInput } from "../dto/url-short.input";
 
@@ -9,7 +10,7 @@ import { UrlShortInput } from "../dto/url-short.input";
 export class LinkRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async findMany({ take, skip, keyword }: FindManyLinkInput) {
+  async findMany({ take, skip, keyword, orderBy }: FindManyLinkInput) {
     try {
       return await this.prismaService.link.findMany({
         where: {
@@ -26,9 +27,7 @@ export class LinkRepository {
         include: {
           visits: true,
         },
-        orderBy: {
-          createdAt: "desc",
-        },
+        orderBy: registerOrderBy(orderBy),
       });
     } catch (error) {
       throw new InternalServerErrorException(error);
