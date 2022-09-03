@@ -31,6 +31,17 @@ export class LinkService {
     return urlString;
   }
 
+  checkExpiration(expiredAt: Date) {
+    if (!expiredAt) return;
+
+    const now = new Date(Date.now());
+
+    console.log("expiredAt", expiredAt);
+    console.log("now", now);
+
+    if (expiredAt <= now) throw new GoneException(`Link is expired`);
+  }
+
   /**
    * find link by shortCode and return `GoneException, 410` if record not found
    *

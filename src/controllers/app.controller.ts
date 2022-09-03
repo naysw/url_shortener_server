@@ -3,15 +3,11 @@ import { EventEmitter2 } from "@nestjs/event-emitter";
 import { Request, Response } from "express";
 import { UrlVisitedEvent } from "../features/link/events/url-visited.event";
 import { LinkService } from "../features/link/services/link.service";
-import { AppService } from "../services/app.service";
-import { VisitService } from "../services/visit.service";
 
 @Controller()
 export class AppController {
   constructor(
-    private readonly appService: AppService,
-    private readonly urlService: LinkService,
-    private readonly visitService: VisitService,
+    private readonly linkService: LinkService,
     private readonly eventEmitter: EventEmitter2,
   ) {}
 
@@ -25,7 +21,13 @@ export class AppController {
      * first we look url table with shortCode from given param,
      * if we do not found record `findByShortCode` will throw NotFoundException
      */
-    const url = await this.urlService.findByShortCode(shortCode);
+    const url = await this.linkService.findByShortCode(shortCode);
+
+    /**
+     * check given link is expired or not,
+     * if expired, it will throw `GoneException`
+     */
+    this.linkService.checkExpiration(url.expiredAt);
 
     /**
      * after we
@@ -42,7 +44,7 @@ export class AppController {
        * to redirect to external url, the url should start with valid
        * protocol, otherwise it will redirect internal server path
        */
-      this.urlService.getRedirectableUrl(url.fullUrl),
+      this.linkService.getRedirectableUrl(url.fullUrl),
     );
   }
 }

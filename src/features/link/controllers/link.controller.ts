@@ -26,7 +26,7 @@ import { LinkService } from "../services/link.service";
 })
 export class LinkController {
   constructor(
-    private readonly urlService: LinkService,
+    private readonly linkService: LinkService,
     private readonly blackListUrl: BlackListUrlService,
   ) {}
 
@@ -35,9 +35,16 @@ export class LinkController {
     @Query(new JoiValidationPipe(findManyLinkInputSchema))
     { take, skip }: FindManyLinkInput,
   ) {
-    const urls = await this.urlService.findMany({ take, skip });
+    const links = await this.linkService.findMany({ take, skip });
 
-    return new ResponseResource(urls);
+    return new ResponseResource(links);
+  }
+
+  @Get("/me")
+  async meLinks() {
+    const links = await this.linkService.findMany({});
+
+    return new ResponseResource(links);
   }
 
   @Post("/short")
@@ -49,8 +56,8 @@ export class LinkController {
   ) {
     await this.blackListUrl.checkBlackListUrl(fullUrl);
 
-    const url = await this.urlService.create({
-      fullUrl: this.urlService.getUrlString(fullUrl),
+    const url = await this.linkService.create({
+      fullUrl: this.linkService.getUrlString(fullUrl),
       expiredAt,
       userId: authUser.id,
     });
@@ -60,9 +67,9 @@ export class LinkController {
 
   @Delete(":id")
   async deleteUrl(@Param("id") id: string) {
-    await this.urlService.findById(id);
+    await this.linkService.findById(id);
 
-    await this.urlService.deleteById(id);
+    await this.linkService.deleteById(id);
 
     return new ResponseResource(null).setMessage(
       `Url with ${JSON.stringify(id)} deleted successfully`,
