@@ -99,7 +99,7 @@ export class LinkService {
   private urlResource(url: Link) {
     return {
       ...url,
-      link: `${this.req.protocol + "://" + this.req.get("host")}/${
+      shortUrl: `${this.req.protocol + "://" + this.req.get("host")}/${
         url.shortCode
       }`,
     };
