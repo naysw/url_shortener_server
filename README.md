@@ -117,3 +117,20 @@ password: "password"
 ```
 
 Note:: Please login with `admin` user to be able to see admin dashboard `localhost:3000/admin` that can checking link statistics, deleting link and so on.
+
+- If you follow and seed dummy data as above step, and when you try to make short this `https://google.com`, you will get error response
+
+```bash
+Sorry! URL with "https://google.com" is not allowed, please try another one
+```
+
+- When you try to access link that already expired, you will got `Gone Exception`
+
+```bash
+{
+    "statusCode": 410,
+    "message": "Link is expired",
+    "error": "Gone"
+}
+
+```
