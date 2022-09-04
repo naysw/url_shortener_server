@@ -8,7 +8,7 @@
 
 ## Overview
 
-URL shortern application, build with React (Frontend) and NestJS (Backend) MYSQL (Database). You can find working demo [Demo Link](https://xdea.lyr.id) here. If you are trying to setup on your local machine, please make sure you clone both `server` and `client` and setup correclty since we are not combine them.
+URL shortern application, build with React (Frontend) and NestJS (Backend) MYSQL (Database). If you are trying to setup on your local machine, please make sure you clone both `server` and `client` and setup correclty since we are not combine them.
 
 ## Installation and Setup Server
 
