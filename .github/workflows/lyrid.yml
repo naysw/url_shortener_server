@@ -1,0 +1,17 @@
+name: Lyrid Deployment
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: LyridInc/lyrid-deploy@v.0.1.1 # This is the action
+        with:
+          lyrid-key: ${{secrets.LYRID_API_KEY}}
+          lyrid-secret: ${{secrets.LYRID_API_SECRET}}
