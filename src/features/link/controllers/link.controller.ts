@@ -10,6 +10,7 @@ import {
 } from "@nestjs/common";
 import { User } from "@prisma/client";
 import { ResponseResource } from "../../../common/resources/response.resource";
+import { AdminGuard } from "../../../features/auth/guards/admin.guard";
 import { JoiValidationPipe } from "../../../pipe/joi-validation.pipe";
 import { AuthUser } from "../../auth/decorators/auth-user.decorator";
 import { JwtAuthGuard } from "../../auth/guards/jwt-auth.guard";
@@ -57,9 +58,11 @@ export class LinkController {
    * @returns Promise<Link[]>
    */
   @Get("/my-links")
-  async meLinks(): Promise<any> {
+  @UseGuards(JwtAuthGuard)
+  async meLinks(@AuthUser() authUser: User): Promise<any> {
     const links = await this.linkService.findMany({
       orderBy: "createdAt=desc",
+      userId: authUser.id,
     });
 
     return new ResponseResource(links);
@@ -110,6 +113,7 @@ export class LinkController {
    * @returns ResponseResource
    */
   @Delete(":id")
+  @UseGuards(JwtAuthGuard, AdminGuard)
   async deleteUrl(@Param("id") id: string): Promise<ResponseResource> {
     await this.linkService.findById(id);
 

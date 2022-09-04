@@ -31,12 +31,16 @@ export class LinkService {
     skip,
     keyword,
     orderBy,
-  }: FindManyLinkInput): Promise<Link[]> {
+    filter,
+    userId,
+  }: FindManyLinkInput & { userId?: string }): Promise<Link[]> {
     const urls = await this.urlRepository.findMany({
       take,
       skip,
       keyword,
       orderBy,
+      filter,
+      userId,
     });
 
     return urls.map((url) => this.linkResource(url));

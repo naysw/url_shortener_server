@@ -22,10 +22,12 @@ export class LinkRepository {
     skip,
     keyword,
     orderBy,
-  }: FindManyLinkInput): Promise<Link[]> {
+    userId,
+  }: FindManyLinkInput & { userId?: string }): Promise<Link[]> {
     try {
       return await this.prismaService.link.findMany({
         where: {
+          userId: userId || undefined,
           OR: keyword && [
             {
               fullUrl: {
