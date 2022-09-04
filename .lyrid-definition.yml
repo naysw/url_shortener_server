@@ -1,0 +1,15 @@
+name: NSW_URL_SHORTERN_SERVER
+description: App description
+ignoreFiles: .husky .vscode dist docs nginx node_modules scripts test .dockerignore .env env.example .gitignore .git .npmrc .prettierrc README.md
+modules:
+  - name: container
+    language: docker
+    description: Module description
+    container:
+    volumes:
+    ports:
+      - alias: "http"
+        port: 80
+    functions:
+      - name: entry
+        description: the entry point for the function
