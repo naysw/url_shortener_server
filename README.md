@@ -54,14 +54,24 @@ npm run dev
 
 To be able to use demo users, roles, and any others, you will nee to run migration and seed database.
 
+Firt push existing migration to db
+
 ```bash
-yarn prisma migrate reset
+yarn prisma db push
 
 or
 
-npm run prisma migrate reset
+npm run prisma db push
+```
 
-// enter Y/y and press Enter to cofirm reset database
+and seed database
+
+```bash
+yarn prisma db seed
+
+or
+
+npm run prisma db seed
 ```
 
 if you want to go with `docker` container
