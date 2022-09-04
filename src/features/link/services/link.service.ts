@@ -7,7 +7,7 @@ import {
 import { REQUEST } from "@nestjs/core";
 import { Link } from "@prisma/client";
 import { Request } from "express";
-import { PrismaService } from "../../../common/prisma.service";
+import { BlackListUrlService } from "../../../features/black-list-url/black-list-url.service";
 import { FindManyLinkInput } from "../dto/find-many-link.input";
 import { UrlShortInput } from "../dto/url-short.input";
 import { LinkRepository } from "../repositories/link.repository";
@@ -15,7 +15,7 @@ import { LinkRepository } from "../repositories/link.repository";
 @Injectable()
 export class LinkService {
   constructor(
-    private readonly prismaService: PrismaService,
+    private blackListUrlService: BlackListUrlService,
     private readonly urlRepository: LinkRepository,
     @Inject(REQUEST) private readonly req: Request,
   ) {}
@@ -47,6 +47,20 @@ export class LinkService {
   }
 
   /**
+   * check given url is already shorted or not
+   *
+   * @param fullUrl string
+   */
+  public checkIsUrlIsAlreadyShort(fullUrl: string) {
+    const url = new URL(fullUrl);
+
+    console.log(this.req.hostname);
+    console.log(url.hostname);
+    console.log(this.req.hostname === url.hostname);
+    return true;
+  }
+
+  /**
    * get redirectable url else throw error if not valid url
    *
    * @param urlString string
@@ -74,6 +88,17 @@ export class LinkService {
     console.log("now", now);
 
     if (expiredAt <= now) throw new GoneException(`Link is expired`);
+  }
+
+  /**
+   * checkt given url is valid to create or not
+   * check url is same current host name or blacklist
+   *
+   * @param fullUrl string
+   */
+  public async checkValidUrlToCreate(fullUrl: string) {
+    this.checkIsUrlIsAlreadyShort(fullUrl);
+    await this.blackListUrlService.checkBlackListUrl(fullUrl);
   }
 
   public checkValidUrlToRedirect(url: string) {

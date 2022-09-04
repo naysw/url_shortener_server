@@ -15,16 +15,23 @@ export class BlackListUrlService {
    * check given url is blacklist or not,
    * if yes, we throw `BadRequestException` and return void
    *
-   * @param url string
+   * @param fullUrl string
    * @return Promise<void>
    */
-  async checkBlackListUrl(url: string): Promise<void> {
-    const blackListUrl = await this.findByUrl(url);
+  async checkBlackListUrl(fullUrl: string): Promise<void> {
+    const domain = new URL(fullUrl);
+
+    console.log(domain);
+
+    /**
+     * we just check blacklist domain by hostname
+     */
+    const blackListUrl = await this.findByUrl(domain.hostname);
 
     if (blackListUrl)
       throw new BadRequestException(
         `Sorry! URL with ${JSON.stringify(
-          url,
+          fullUrl,
         )} is not allowed, please try another one`,
       );
   }

@@ -14,7 +14,6 @@ import { AdminGuard } from "../../../features/auth/guards/admin.guard";
 import { JoiValidationPipe } from "../../../pipe/joi-validation.pipe";
 import { AuthUser } from "../../auth/decorators/auth-user.decorator";
 import { JwtAuthGuard } from "../../auth/guards/jwt-auth.guard";
-import { BlackListUrlService } from "../../black-list-url/black-list-url.service";
 import {
   FindManyLinkInput,
   findManyLinkInputSchema,
@@ -26,10 +25,7 @@ import { LinkService } from "../services/link.service";
   path: "api/links",
 })
 export class LinkController {
-  constructor(
-    private readonly linkService: LinkService,
-    private readonly blackListUrl: BlackListUrlService,
-  ) {}
+  constructor(private readonly linkService: LinkService) {}
 
   /**
    * find many link
@@ -82,7 +78,7 @@ export class LinkController {
     { fullUrl, expiredAt }: UrlShortInput,
     @AuthUser() authUser: User,
   ): Promise<any> {
-    await this.blackListUrl.checkBlackListUrl(fullUrl);
+    await this.linkService.checkValidUrlToCreate(fullUrl);
 
     const url = await this.linkService.create({
       fullUrl: this.linkService.getUrlString(fullUrl),
