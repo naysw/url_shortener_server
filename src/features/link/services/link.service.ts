@@ -57,6 +57,12 @@ export class LinkService {
     console.log(this.req.hostname);
     console.log(url.hostname);
     console.log(this.req.hostname === url.hostname);
+
+    /**
+     * TODO here we will check given fullUrl is the same host and
+     * shortCode is already exists on db record,
+     * if yes, we will throw Error `Link is already short`
+     */
     return true;
   }
 
@@ -102,6 +108,10 @@ export class LinkService {
   }
 
   public checkValidUrlToRedirect(url: string) {
+    // TODO
+    /**
+     * here we will check given url is valid to redirect or not
+     */
     return true;
   }
 
