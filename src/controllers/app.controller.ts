@@ -1,5 +1,6 @@
 import {
   CacheInterceptor,
+  CacheTTL,
   Controller,
   Get,
   HttpStatus,
@@ -29,6 +30,10 @@ export class AppController {
    * @returns Promise<void>
    */
   @Get(":shortCode")
+  /**
+   * we overide global cache ttl with 60s
+   */
+  @CacheTTL(60)
   @UseInterceptors(CacheInterceptor)
   async getLink(
     @Param("shortCode") shortCode: string,

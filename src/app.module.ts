@@ -1,5 +1,4 @@
-import { CacheInterceptor, CacheModule, Module } from "@nestjs/common";
-import { APP_INTERCEPTOR } from "@nestjs/core";
+import { CacheModule, Module } from "@nestjs/common";
 import { EventEmitterModule } from "@nestjs/event-emitter";
 import { CommonModule } from "./common/common.module";
 import { AppController } from "./controllers/app.controller";
@@ -14,7 +13,9 @@ import { VisitService } from "./services/visit.service";
     // ServeStaticModule.forRoot({
     //   exclude: ["/api*"],
     // }),
-    CacheModule.register(),
+    CacheModule.register({
+      isGlobal: true,
+    }),
     LinkModule,
     CommonModule,
     EventEmitterModule.forRoot(),
@@ -25,10 +26,10 @@ import { VisitService } from "./services/visit.service";
     AppService,
     VisitService,
     VisitRepository,
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: CacheInterceptor,
-    },
+    // {
+    //   provide: APP_INTERCEPTOR,
+    //   useClass: CacheInterceptor,
+    // },
   ],
 })
 export class AppModule {}
