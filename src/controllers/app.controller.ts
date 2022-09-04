@@ -20,13 +20,21 @@ export class AppController {
     private readonly eventEmitter: EventEmitter2,
   ) {}
 
+  /**
+   * get link by shortcode
+   *
+   * @param shortCode string
+   * @param req Request
+   * @param res Response
+   * @returns Promise<void>
+   */
   @Get(":shortCode")
   @UseInterceptors(CacheInterceptor)
   async getLink(
     @Param("shortCode") shortCode: string,
     @Req() req: Request,
     @Res() res: Response,
-  ) {
+  ): Promise<void> {
     /**
      * first we look url table with shortCode from given param,
      * if we do not found record `findByShortCode` will throw NotFoundException

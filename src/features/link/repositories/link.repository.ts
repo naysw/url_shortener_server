@@ -1,7 +1,8 @@
 import { Injectable, InternalServerErrorException } from "@nestjs/common";
+import { Link } from "@prisma/client";
 import cuid from "cuid";
 import { PrismaService } from "../../../common/prisma.service";
-import { DEFAULT_TAKE } from "../../../config/constants";
+import { DEFAULT_TAKE, IS_DEV } from "../../../config/constants";
 import { registerOrderBy } from "../../../utils/queryBuilder";
 import { FindManyLinkInput } from "../dto/find-many-link.input";
 import { UrlShortInput } from "../dto/url-short.input";
@@ -10,7 +11,18 @@ import { UrlShortInput } from "../dto/url-short.input";
 export class LinkRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async findMany({ take, skip, keyword, orderBy }: FindManyLinkInput) {
+  /**
+   * find many link
+   *
+   * @param param0 FindManyLinkInput
+   * @returns Promise<Link]>
+   */
+  async findMany({
+    take,
+    skip,
+    keyword,
+    orderBy,
+  }: FindManyLinkInput): Promise<Link[]> {
     try {
       return await this.prismaService.link.findMany({
         where: {
@@ -26,27 +38,47 @@ export class LinkRepository {
         skip: Number(skip) || undefined,
         include: {
           visits: true,
+          _count: true,
         },
         orderBy: registerOrderBy(orderBy),
       });
     } catch (error) {
-      throw new InternalServerErrorException(error);
+      throw new InternalServerErrorException(
+        IS_DEV ? error : "DB Error on findMany Link",
+      );
     }
   }
 
-  async findByShortCode(shortCode: string) {
+  /**
+   * find link by shortcode
+   *
+   * @param shortCode string
+   * @returns Promise<Link>
+   */
+  async findByShortCode(shortCode: string): Promise<Link> {
     try {
       return await this.prismaService.link.findUnique({
         where: {
           shortCode,
         },
+        include: {
+          visits: true,
+        },
       });
     } catch (error) {
-      throw new InternalServerErrorException("DB error");
+      throw new InternalServerErrorException(
+        IS_DEV ? error : "DB Error on findByShortCode",
+      );
     }
   }
 
-  async findById(id: string) {
+  /**
+   * find link by id
+   *
+   * @param id string
+   * @returns Promise<LInk>
+   */
+  async findById(id: string): Promise<Link> {
     try {
       return await this.prismaService.link.findUnique({
         where: {
@@ -57,15 +89,23 @@ export class LinkRepository {
         },
       });
     } catch (error) {
-      throw new InternalServerErrorException("DB error");
+      throw new InternalServerErrorException(
+        IS_DEV ? error : "DB Error on findById",
+      );
     }
   }
 
+  /**
+   * create url short
+   *
+   * @param param0 UrlShortInput
+   * @returns Promise<Link>
+   */
   async create({
     fullUrl,
     expiredAt,
     userId,
-  }: UrlShortInput & { userId?: string }) {
+  }: UrlShortInput & { userId?: string }): Promise<Link> {
     try {
       return await this.prismaService.link.create({
         data: {
@@ -80,19 +120,34 @@ export class LinkRepository {
               }
             : undefined,
         },
+        include: {
+          visits: true,
+        },
       });
     } catch (error) {
-      throw new InternalServerErrorException("Error Occoured on : create Url");
+      throw new InternalServerErrorException(
+        IS_DEV ? error : "DB Error on create short link",
+      );
     }
   }
 
-  async deleteById(id: string) {
+  /**
+   * delete link by id
+   *
+   * @param id string
+   * @returns Promise<Link>
+   */
+  async deleteById(id: string): Promise<Link> {
     try {
       return await this.prismaService.link.delete({
         where: {
           id,
         },
       });
-    } catch (error) {}
+    } catch (error) {
+      throw new InternalServerErrorException(
+        IS_DEV ? error : "DB Error on deleteById",
+      );
+    }
   }
 }

@@ -20,7 +20,18 @@ export class LinkService {
     @Inject(REQUEST) private readonly req: Request,
   ) {}
 
-  async findMany({ take, skip, keyword, orderBy }: FindManyLinkInput) {
+  /**
+   * find many link
+   *
+   * @param param0 FindManyLinkInput
+   * @returns Promise<Link]>
+   */
+  async findMany({
+    take,
+    skip,
+    keyword,
+    orderBy,
+  }: FindManyLinkInput): Promise<Link[]> {
     const urls = await this.urlRepository.findMany({
       take,
       skip,
@@ -28,15 +39,29 @@ export class LinkService {
       orderBy,
     });
 
-    return urls.map((url) => this.urlResource(url));
+    return urls.map((url) => this.linkResource(url));
   }
 
-  getRedirectableUrl(urlString: string) {
+  /**
+   * get redirectable url else throw error if not valid url
+   *
+   * @param urlString string
+   * @returns string
+   */
+  public getRedirectableUrl(urlString: string): string {
+    this.checkValidUrlToRedirect(urlString);
     // console.log(url.parse())
     return urlString;
   }
 
-  checkExpiration(expiredAt: Date) {
+  /**
+   * check given expiredAt date is less than or equal with now or not,
+   * if yes we throw `GoneException` Link is expired
+   *
+   * @param expiredAt Date
+   * @returns void
+   */
+  checkExpiration(expiredAt: Date): void {
     if (!expiredAt) return;
 
     const now = new Date(Date.now());
@@ -47,13 +72,17 @@ export class LinkService {
     if (expiredAt <= now) throw new GoneException(`Link is expired`);
   }
 
+  public checkValidUrlToRedirect(url: string) {
+    return true;
+  }
+
   /**
    * find link by shortCode and return `GoneException, 410` if record not found
    *
    * @param shoortCode string
    * @returns
    */
-  async findByShortCode(shoortCode: string) {
+  async findByShortCode(shoortCode: string): Promise<Link> {
     const url = await this.urlRepository.findByShortCode(shoortCode);
 
     if (!url)
@@ -61,19 +90,32 @@ export class LinkService {
         `Url with ${JSON.stringify(shoortCode)} not found or deleted`,
       );
 
-    return this.urlResource(url);
+    return this.linkResource(url);
   }
 
-  async findById(id: string) {
+  /**
+   * find link by id
+   *
+   * @param id string
+   * @returns Promise<Link>
+   */
+  async findById(id: string): Promise<Link> {
     const url = await this.urlRepository.findById(id);
 
     if (!url)
       throw new NotFoundException(`Url with ${JSON.stringify(id)} not found`);
 
-    return this.urlResource(url);
+    return this.linkResource(url);
   }
 
-  getUrlString(fullUrl: string): string {
+  /**
+   * check url is start with http || https,
+   * if yes, we return origin url else we put valid protocol to url
+   *
+   * @param fullUrl string
+   * @returns string
+   */
+  public getUrlString(fullUrl: string): string {
     const r = new RegExp("^(?:[a-z+]+:)?//", "i");
 
     // if (
@@ -86,26 +128,45 @@ export class LinkService {
     return fullUrl;
   }
 
+  /**
+   * create new url short
+   *
+   * @param param0 UrlShortInput
+   * @returns Promise<Link>
+   */
   async create({
     fullUrl,
     expiredAt,
     userId,
-  }: UrlShortInput & { userId?: string }) {
+  }: UrlShortInput & { userId?: string }): Promise<Link> {
     const url = await this.urlRepository.create({ fullUrl, expiredAt, userId });
 
-    return this.urlResource(url);
+    return this.linkResource(url);
   }
 
-  private urlResource(url: Link) {
+  /**
+   * map link resource, we added extra property
+   * `shortUrl` alone with Link Model to work with various domain
+   *
+   * @param link Link
+   * @returns
+   */
+  private linkResource(link: Link): Link & { shortUrl: string } {
     return {
-      ...url,
+      ...link,
       shortUrl: `${this.req.protocol + "://" + this.req.get("host")}/${
-        url.shortCode
+        link.shortCode
       }`,
     };
   }
 
-  async deleteById(id: string) {
+  /**
+   * delete link by id
+   *
+   * @param id string
+   * @returns Promise<Link>
+   */
+  async deleteById(id: string): Promise<Link> {
     return await this.urlRepository.deleteById(id);
   }
 }

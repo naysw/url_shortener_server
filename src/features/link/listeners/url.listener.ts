@@ -7,8 +7,15 @@ import { UrlVisitedEvent } from "../events/url-visited.event";
 export class UrlListener {
   constructor(private readonly visitService: VisitService) {}
 
+  /**
+   * listen `url.visited` event and
+   * create visit record with associated link
+   *
+   * @param event UrlVisitedEvent
+   * @return Promise<void>
+   */
   @OnEvent("url.visited", { async: true })
-  async handleUrlVisitedEvent(event: UrlVisitedEvent) {
+  async handleUrlVisitedEvent(event: UrlVisitedEvent): Promise<void> {
     await this.visitService.create(event.urlId, event.ip);
   }
 }
