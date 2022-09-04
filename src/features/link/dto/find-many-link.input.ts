@@ -11,5 +11,5 @@ export const findManyLinkInputSchema = Joi.object({
   orderBy: Joi.string()
     .max(255)
     .trim()
-    .custom(allowedOrderBy(["visitCount", "createdAt"])),
+    .custom(allowedOrderBy(["visitCount", "createdAt", "expiredAt"])),
 });

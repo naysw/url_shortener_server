@@ -30,11 +30,17 @@ export class LinkController {
     private readonly blackListUrl: BlackListUrlService,
   ) {}
 
+  /**
+   * find many link
+   *
+   * @param param0 FindManyLinkInput
+   * @returns Promise<Link[]>
+   */
   @Get()
   async findManyLink(
     @Query(new JoiValidationPipe(findManyLinkInputSchema))
     { take, skip, keyword, orderBy }: FindManyLinkInput,
-  ) {
+  ): Promise<any> {
     const links = await this.linkService.findMany({
       take,
       skip,
@@ -45,8 +51,13 @@ export class LinkController {
     return new ResponseResource(links);
   }
 
+  /**
+   * return auth user links
+   *
+   * @returns Promise<Link[]>
+   */
   @Get("/my-links")
-  async meLinks() {
+  async meLinks(): Promise<any> {
     const links = await this.linkService.findMany({
       orderBy: "createdAt=desc",
     });
@@ -54,13 +65,20 @@ export class LinkController {
     return new ResponseResource(links);
   }
 
+  /**
+   * create short given url
+   *
+   * @param param0 UrlShortInput
+   * @param authUser User
+   * @returns Promise<Link>
+   */
   @Post("/short")
   @UseGuards(JwtAuthGuard)
   async makeShort(
     @Body(new JoiValidationPipe(urlShortInputSchema))
     { fullUrl, expiredAt }: UrlShortInput,
     @AuthUser() authUser: User,
-  ) {
+  ): Promise<any> {
     await this.blackListUrl.checkBlackListUrl(fullUrl);
 
     const url = await this.linkService.create({
@@ -72,15 +90,27 @@ export class LinkController {
     return new ResponseResource(url).setMessage("Url short successfully");
   }
 
+  /**
+   * get link detail by id
+   *
+   * @param id string
+   * @returns Promise<Link>
+   */
   @Get(":id")
-  async linkDetails(@Param("id") id: string) {
+  async linkDetails(@Param("id") id: string): Promise<any> {
     const link = await this.linkService.findById(id);
 
     return new ResponseResource(link);
   }
 
+  /**
+   * delete link by id
+   *
+   * @param id string
+   * @returns ResponseResource
+   */
   @Delete(":id")
-  async deleteUrl(@Param("id") id: string) {
+  async deleteUrl(@Param("id") id: string): Promise<ResponseResource> {
     await this.linkService.findById(id);
 
     await this.linkService.deleteById(id);

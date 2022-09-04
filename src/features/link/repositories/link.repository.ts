@@ -39,6 +39,7 @@ export class LinkRepository {
         include: {
           visits: true,
           _count: true,
+          user: true,
         },
         orderBy: registerOrderBy(orderBy),
       });
