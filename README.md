@@ -114,6 +114,8 @@ or
 npm run start
 ```
 
+By default, Client will up and running on `localhost:3000` and server will be `localhost:4000`
+
 Once your application is up and running, you can start play around. First, you may need to login to perform certain tasks. you could use below demo credentials
 
 ```
