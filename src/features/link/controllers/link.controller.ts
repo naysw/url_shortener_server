@@ -45,9 +45,11 @@ export class LinkController {
     return new ResponseResource(links);
   }
 
-  @Get("/me")
+  @Get("/my-links")
   async meLinks() {
-    const links = await this.linkService.findMany({});
+    const links = await this.linkService.findMany({
+      orderBy: "createdAt=desc",
+    });
 
     return new ResponseResource(links);
   }
