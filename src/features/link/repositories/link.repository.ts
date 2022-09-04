@@ -52,6 +52,9 @@ export class LinkRepository {
         where: {
           id,
         },
+        include: {
+          visits: true,
+        },
       });
     } catch (error) {
       throw new InternalServerErrorException("DB error");

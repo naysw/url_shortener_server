@@ -70,6 +70,13 @@ export class LinkController {
     return new ResponseResource(url).setMessage("Url short successfully");
   }
 
+  @Get(":id")
+  async linkDetails(@Param("id") id: string) {
+    const link = await this.linkService.findById(id);
+
+    return new ResponseResource(link);
+  }
+
   @Delete(":id")
   async deleteUrl(@Param("id") id: string) {
     await this.linkService.findById(id);
