@@ -8,7 +8,7 @@
 
 ## Overview
 
-URL shortern application, build with React (Frontend) and NestJS (Backend) MYSQL (Database). Working demo [Demo Link](https://xdea.lyr.id) is here. If you setup on your local machine, please make sure you clone both `server` and `client` since we are not combine them.
+URL shortern application, build with React (Frontend) and NestJS (Backend) MYSQL (Database). You can find working demo [Demo Link](https://xdea.lyr.id) here. If you are trying to setup on your local machine, please make sure you clone both `server` and `client` and setup correclty since we are not combine them.
 
 ## Installation and Setup Server
 
@@ -42,7 +42,7 @@ DATABASE_URL="mysql://<user>:<password>@localhost:3306/<database>"
 ACCESS_TOKEN_SECRET=
 ```
 
-start application with localhost
+once everything setup correctly, you can start application by running
 
 ```bash
 yarn dev
@@ -52,7 +52,7 @@ or
 npm run dev
 ```
 
-Migrate database and Seed dummy data
+To be able to use demo users, roles, and any others, you will nee to run migration and seed database.
 
 ```bash
 yarn prisma migrate reset
@@ -74,7 +74,9 @@ docker build -t url_shortener_server .
 docker run -d -p 4000:4000 --env-file ./evn url_shortener_server
 ```
 
-## Installation and Setup Server
+## Installation and Setup Client
+
+Clone react repo
 
 ```bash
 git@github.com:naysw/url_shortener_client.git
@@ -102,9 +104,7 @@ or
 npm run start
 ```
 
-once your application is up and running, you can start play around with provided features.
-
-First, you may need to login to perform certain tasks.you could use below demo crenditials
+Once your application is up and running, you can start play around. First, you may need to login to perform certain tasks. you could use below demo credentials
 
 ```
 Admin,
@@ -116,4 +116,4 @@ username: "user"
 password: "password"
 ```
 
-Note:: if you have loggedin with `user` , you will not able to see admin dashboard `localhost:3000/admin` that can check link statictis, deleting link and so on.
+Note:: Please login with `admin` user to be able to see admin dashboard `localhost:3000/admin` that can checking link statistics, deleting link and so on.
